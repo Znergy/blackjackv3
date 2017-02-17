@@ -1,6 +1,9 @@
 $(document).ready(function(){
 
   var score = 0;
+  var random1CardWorth = 0;
+  var random2CardWorth = 0;
+  var random3CardWorth = 0;
 
   $("#dealCards").one('click', function() {
     var randomSuit1 = getRandomSuit();
@@ -8,11 +11,11 @@ $(document).ready(function(){
 
     var random1 = getFaceValue();
     var random1CardType = random1[0]; // type
-    var random1CardWorth = parseInt(random1[1]); // number
+    random1CardWorth = parseInt(random1[1]); // number
 
     var random2 = getFaceValue();
     var random2CardType = random2[0]; // type
-    var random2CardWorth = parseInt(random2[1]); // number
+    random2CardWorth = parseInt(random2[1]); // number
 
     score = random1CardWorth + random2CardWorth;
 
@@ -21,6 +24,11 @@ $(document).ready(function(){
     $(".displayLeft").append('<img src="cards/'+random1CardType+'_of_'+randomSuit1+'.png">');
     $(".displayRight").append('<img src="cards/'+random2CardType+'_of_'+randomSuit2+'.png">');
     $("img").css("height", "300px");
+
+    if (score === 21) {
+      $("#scoreHeader").html("<strong>YOU WIN!</strong>" + score)
+      $("#hitMe").html('<button type="button" disabled>Top score!</button>')
+    }
   });
 
   $("#hitMe").click(function() {
@@ -28,7 +36,7 @@ $(document).ready(function(){
 
     var random3 = getFaceValue();
     var random3CardType = random3[0]; // type
-    var random3CardWorth = parseInt(random3[1]); // number
+    random3CardWorth = parseInt(random3[1]); // number
 
     score = score + random3CardWorth;
 
@@ -39,6 +47,11 @@ $(document).ready(function(){
     $(".displayHit").append('<img src="cards/'+random3CardType+'_of_'+randomSuit3+'.png">');
     $("img").css("height", "300px");
 
+    if ((random3CardWorth === 11 || random1CardWorth === 11 || random2CardWorth === 11) && (score > 10)) {
+        score = score - 10;
+    }
+
+
     if (score === 21) {
       $("#scoreHeader").html("<strong>YOU WIN!</strong>" + score)
       $("#hitMe").html('<button type="button" disabled>Top score!</button>')
@@ -47,9 +60,6 @@ $(document).ready(function(){
       $("#hitMe").html('<button type="button" disabled>You\'re out</button>')
     }
 
-    if (random3CardType === "ace" && (score > 10)) {
-      random3CardWorth === 1;
-    }
   });
 
   $("#reloadPage").click(function(){
